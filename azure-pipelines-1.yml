@@ -1,0 +1,37 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool: 5-aug-agent
+
+stages:
+- stage: InfraStage
+  displayName: "Infrastructure Stage"
+
+  jobs:
+  - job: TerraformJob
+    displayName: "Terraform Deployment"
+
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'sourav_service'
+        backendAzureRmStorageAccountName: 'souravsathvik'
+        backendAzureRmContainerName: 'rishikacontainor'
+        backendAzureRmKey: 'pipeline.tfstate'
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        environmentServiceNameAzureRM: 'sourav_service'
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        environmentServiceNameAzureRM: 'sourav_service'
