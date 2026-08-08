@@ -19,10 +19,4 @@ resource "azurerm_resource_group" "rishi" {
   }
 }
 
-resource "azurerm_storage_account" "storage" {
-name = "souravsathvik123"
-resource_group_name = azurerm_resource_group.rishi.name
-location = "east us"
-account_replication_type="LRS"
-account_tier = "Standard"
-}
+
