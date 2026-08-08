@@ -11,7 +11,7 @@ provider "azurerm" {
   features {}
 }
 resource "azurerm_resource_group" "rishi" {
-  name     = "rishi_bhai"
+  name     = "rishi_and_bikram"
   location = "east us"
 
   tags = {
