@@ -52,11 +52,11 @@ stages:
               notifyUsers: 'abc'
 
   - stage: apply
+    dependsOn: approval
     displayName: apply
     jobs:
       - job: apply
         displayName: apply
-        
         steps:
           - task: TerraformTask@5
             inputs:
