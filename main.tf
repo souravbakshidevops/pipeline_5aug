@@ -18,5 +18,12 @@ resource "azurerm_resource_group" "rishi" {
     owner = "sourav"
   }
 }
+resource "azurerm_resource_group" "bakshi" {
+  name     = "bakshiJi-2"
+  location = "east us"
 
+  tags = {
+    owner = "sourav"
+  }
+}
 
