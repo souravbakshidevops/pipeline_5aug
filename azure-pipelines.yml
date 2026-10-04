@@ -1,11 +1,49 @@
-pool:
-  name: agent_bikram
+trigger:
+ - main
+pool:octoberagent
 stages:
-- stage: yuva_stage
-  jobs:
-  - job: college_job
-    steps:
-    - task: PowerShell@2
-      inputs:
-        targetType: 'inline'
-        script: 'Write-Host "Hello world from Yuva Job"'
+  - stage: validate
+    displayName: validate_stage
+    jobs:
+      - job: buildjob
+        displayName: validate
+        steps:
+        - task: TerraformInstaller@1
+          inputs:
+            terraformVersion: 'latest'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'bakshibabu'
+            backendAzureRmStorageAccountName: 'pipelinetfstate'
+            backendAzureRmContainerName: 'xyzcontainer'
+            backendAzureRmKey: 'souavterraform.tfstate'
+        
+stages:
+  - stage: plan
+    displayName: plan
+    jobs:
+      - job: buildjob
+        displayName: plan
+        steps:
+      - task: TerraformTask@5
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: 'bakshibabu'
+          backendAzureRmStorageAccountName: 'pipelinetfstate'
+          backendAzureRmContainerName: 'xyzcontainer'
+          backendAzureRmKey: 'souravvalidate.tfstate'
+      - task: TerraformTask@5
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
+          environmentServiceNameAzureRM: 'bakshibabu'
+stages:
+  - stage: plan
+    displayName: plan
+    jobs:
+      - job: buildjob
+        displayName: plan
+        steps:
